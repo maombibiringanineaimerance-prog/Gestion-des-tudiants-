@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Gestion des étudiants</title>
+
+<style>
+    body {
+        font-family: Arial;
+        background: hsla(196, 44%, 77%, 0.974);
+        padding: 20px;
+    }
+
+    h2 {
+        text-align: center;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    input {
+        padding: 10px;
+        margin: 5px;
+        width: 30%;
+    }
+
+    button {
+        padding: 10px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .add { background: #4CAF50; color: white; }
+    .delete { background: red; color: white; }
+    .update { background: orange; color: white; }
+    .search { background: rgb(76, 183, 233); color: white; }
+
+    table {
+        width: 100%;
+        margin-top: 20px;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        border: 1px solid #ccc;
+        padding: 10px;
+        text-align: center;
+    }
+
+    th {
+        background: #23a9e3e7;
+        color: hsla(100, 9%, 93%, 0.951);
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Inscription des étudiants</h2>
+
+    <input type="text" id="nom" placeholder="Nom">
+    <input type="text" id="prenom" placeholder="Prénom">
+    <input type="text" id="classe" placeholder="Classe">
+
+    <br>
+
+    <button class="add" onclick="ajouter()">Enregistrer</button>
+    <button class="update" onclick="modifier()">Modifier</button>
+    <button class="delete" onclick="supprimer()">Supprimer</button>
+    <button class="search" onclick="rechercher()">Rechercher</button>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Classe</th>
+            </tr>
+        </thead>
+        <tbody id="table"></tbody>
+    </table>
+</div>
+
+<script>
+let etudiants = [];
+let indexSelectionne = -1;
+
+function afficher() {
+    let table = document.getElementById("table");
+    table.innerHTML = "";
+
+    etudiants.forEach((e, index) => {
+        table.innerHTML += `
+            <tr onclick="selectionner(${index})">
+                <td>${e.nom}</td>
+                <td>${e.prenom}</td>
+                <td>${e.classe}</td>
+            </tr>
+        `;
+    });
+}
+
+function ajouter() {
+    let nom = document.getElementById("nom").value;
+    let prenom = document.getElementById("prenom").value;
+    let classe = document.getElementById("classe").value;
+
+    etudiants.push({nom, prenom, classe});
+    afficher();
+}
+
+function selectionner(index) {
+    indexSelectionne = index;
+    let e = etudiants[index];
+
+    document.getElementById("nom").value = e.nom;
+    document.getElementById("prenom").value = e.prenom;
+    document.getElementById("classe").value = e.classe;
+}
+
+function modifier() {
+    if(indexSelectionne === -1) return;
+
+    etudiants[indexSelectionne] = {
+        nom: document.getElementById("nom").value,
+        prenom: document.getElementById("prenom").value,
+        classe: document.getElementById("classe").value
+    };
+
+    afficher();
+}
+
+function supprimer() {
+    if(indexSelectionne === -1) return;
+
+    etudiants.splice(indexSelectionne, 1);
+    afficher();
+}
+
+function rechercher() {
+    let nom = document.getElementById("nom").value.toLowerCase();
+
+    let resultat = etudiants.filter(e => e.nom.toLowerCase().includes(nom));
+
+    let table = document.getElementById("table");
+    table.innerHTML = "";
+
+    resultat.forEach(e => {
+        table.innerHTML += `
+            <tr>
+                <td>${e.nom}</td>
+                <td>${e.prenom}</td>
+                <td>${e.classe}</td>
+            </tr>
+        `;
+    });
+}
+</script>
+
+</body>
+</html>

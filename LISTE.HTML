@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Liste des étudiants</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+    }
+
+    header {
+        background: #4facfe;
+        color: rgb(248, 245, 241);
+        padding: 15px;
+        text-align: center;
+        font-size: 22px;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 900px;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #f8eded;
+        border-radius: 5px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th, td {
+        padding: 12px;
+        border: 1px solid #43c7e5ed;
+        text-align: center;
+    }
+
+    th {
+        background: #4fbbfe;
+        color: rgb(248, 233, 233);
+    }
+
+    button {
+        padding: 6px 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        color: rgba(255, 255, 255, 0.959);
+    }
+
+    .delete {
+        background: rgba(255, 0, 21, 0.867);
+    }
+
+    .delete:hover {
+        background: darkred;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    📋 Liste des étudiants inscrits
+</header>
+
+<div class="container">
+
+    <input type="text" id="search" placeholder="Rechercher par nom..." onkeyup="rechercher()">
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Classe</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="table"></tbody>
+    </table>
+
+</div>
+
+<script>
+// Données simulées (tu peux remplacer par localStorage plus tard)
+let etudiants = [
+    {nom: "Maombi", prenom: "Aimerance", classe: "L3"},
+    {nom: "Buseka", prenom: "Precilia", classe: "L3"},
+    {nom: "Balenga", prenom: "Julie", classe: "L2"},
+    {nom: "Akamba", prenom: "Sharon", classe: "L2"},
+    {nom: "Angangi",prenom: "sephora", classe: "L4"},
+    {nom: "Kanyeba",prenom: "prisca", classe: "L2"},
+    {nom: "Kalala",prenom: "cecile", classe: "L2"},
+    {nom: "ngonga",prenom: "precilia", classe: "M1"},
+    {nom: "nkosi",prenom: "benji", classe: "M2"},
+
+];
+
+function afficher(data = etudiants) {
+    let table = document.getElementById("table");
+    table.innerHTML = "";
+
+    data.forEach((e, index) => {
+        table.innerHTML += `
+            <tr>
+                <td>${e.nom}</td>
+                <td>${e.prenom}</td>
+                <td>${e.classe}</td>
+                <td>
+                    <button class="delete" onclick="supprimer(${index})">Supprimer</button>
+                </td>
+            </tr>
+        `;
+    });
+}
+
+function supprimer(index) {
+    etudiants.splice(index, 1);
+    afficher();
+}
+
+function rechercher() {
+    let valeur = document.getElementById("search").value.toLowerCase();
+
+    let resultat = etudiants.filter(e =>
+        e.nom.toLowerCase().includes(valeur)
+    );
+
+    afficher(resultat);
+}
+
+// Affichage au chargement
+afficher();
+</script>
+
+</body>
+</html>
